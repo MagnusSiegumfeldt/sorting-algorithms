@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-import { Form, FormGroup, Label, Button, CustomInput } from 'reactstrap';
+import { Button, Slider } from '@material-ui/core';
 
 export class SortingApp extends Component {
     state = {
@@ -13,6 +11,8 @@ export class SortingApp extends Component {
         sorted: false
     }
 
+    
+    
     componentDidMount(){
         this.generateBars();
     }
@@ -57,22 +57,17 @@ export class SortingApp extends Component {
         this.generateBars();
     }
 
-    handleSizeChange(e) {
-        const { target } = e;
-        const { name } = target
-        const value = Number(target.value) * 2 + 10;
-        console.log(value);
+    handleSizeChange(e, value) {
+        value = Number(value) * 2 + 20;
         this.setState({
-            [ name ]: value
+            size: value 
         });
     }
-    handleSpeedChange(e) {
-        const { target } = e;
-        const { name } = target
-        const value = 100 - Number(target.value);
-        console.log(value)
+
+    handleSpeedChange(e, value) {
+        value = 100 - Number(value);
         this.setState({
-            [ name ]: value
+            speed: value
         });
     }
 
@@ -170,7 +165,7 @@ export class SortingApp extends Component {
 
         
     }
-
+    
 
     /* QUICKSORT */
     async quickSortStart(){
@@ -203,22 +198,14 @@ export class SortingApp extends Component {
     /* COMPONENT RENDERING */
 
     render() {
-        
-
         return (
             <div>
                 <div className="settings-container">
-                    <Form className="settings-form" onSubmit={ (e) => this.submitForm(e) } >
-                        <FormGroup>
-                            <Label for="sizeSlider">Size</Label>
-                            <CustomInput style={{color: '#f1f1f1'}} type="range" id="sizeSlider" className="settings-slider" name="size" onChange={ (e) => this.handleSizeChange(e) }/>
-                        </FormGroup>
-                        <Button className="settings-btn start-btn">New Array</Button>
-                        <FormGroup>
-                            <Label for="speedSlider">Speed</Label>
-                            <CustomInput type="range" id="speedSlider" className="settings-slider" name="speed" onChange={ (e) => this.handleSpeedChange(e) }/>
-                        </FormGroup>
-                    </Form>
+                    <p className="settings-label">Size</p>
+                    <Slider className="settings-slider" onChange={(e, value) => this.handleSizeChange(e, value)} aria-labelledby="continuous-slider" defaultValue={50}></Slider>
+                    <Button className="settings-btn start-btn" onClick={() => this.generateBars()}> New Array </Button>
+                    <p className="settings-label">Speed</p>
+                    <Slider className="settings-slider" onChange={(e, value) => this.handleSpeedChange(e, value)} aria-labelledby="continuous-slider" defaultValue={50}></Slider>
                     <Button className="settings-btn" onClick={() => this.insertionSort()}> Insertion Sort </Button>
                     <Button className="settings-btn" onClick={() => this.mergeSortStart()}> Merge Sort </Button>
                     <Button className="settings-btn" onClick={() => this.quickSortStart()}> Quick Sort </Button>
