@@ -18,7 +18,6 @@ export class SortingApp extends Component {
     }
 
     /* GENERAL */
-
     generateBars() {
         if (!this.state.inProgess){
             const size = this.state.size;
@@ -71,10 +70,17 @@ export class SortingApp extends Component {
         });
     }
 
+    setActive(barId) {
+
+        let elem = document.getElementById(barId);
+        elem.classList.add("bar-active")
+        setTimeout(function(){
+            elem.classList.remove("bar-active")
+        }, 20);
+    }
 
 
     /* INSERTION SORT */
-
     async insertionSort() {
         if (!this.state.inProgess && !this.state.sorted){
             this.setState({inProgess: true})
@@ -83,11 +89,10 @@ export class SortingApp extends Component {
             for (let i = 1; i < bars.length; i++){
                 let j = i;
                 while (j > 0 && bars[j - 1] > bars[j]) {                
-                    
                     await this.delay(this.state.speed)
-                    var swap = bars[j];
-                    bars[j] = bars[j - 1];
-                    bars[j - 1] = swap;
+                    this.setActive("bar" + j)
+                    this.setActive("bar" + (j - 1))
+                    this.swap(bars, j, j-1);
                     j--;
                     this.setState(bars);
                 }
@@ -97,7 +102,6 @@ export class SortingApp extends Component {
     }
 
     /* MERGESORT */
-
     async mergeSortStart(){
         if (!this.state.inProgess && !this.state.sorted){
             this.setState({inProgess: true})
@@ -105,20 +109,16 @@ export class SortingApp extends Component {
             await this.mergeSort(bars, 0, bars.length - 1);
             this.setState({inProgess: false, sorted: true})
         }
-
     }
 
     async mergeSort(array, start, end) {
-        
         if (start < end) {
             let middle = Math.floor((start + end) / 2)
             await this.mergeSort(array, start, middle)
             await this.mergeSort(array, middle + 1, end)  
             
             await this.merge(array, start, middle, end)
-
         }
-        
     }
       
     async merge(array, start, middle, end) { 
@@ -144,8 +144,10 @@ export class SortingApp extends Component {
             await this.delay(this.state.speed)
             this.setState({bars: array});
             if (leftArray[leftIndex] <= rightArray[rightIndex]){
+                this.setActive("bar" + currentIndex)
                 array[currentIndex] = leftArray[leftIndex++]
             } else {
+                this.setActive("bar" + currentIndex)
                 array[currentIndex] = rightArray[rightIndex++]
             }
             currentIndex++
@@ -154,12 +156,14 @@ export class SortingApp extends Component {
         while (leftIndex < leftArrayLength) { 
             await this.delay(this.state.speed)
             this.setState({bars: array});
+            this.setActive("bar" + currentIndex)
             array[currentIndex++] = leftArray[leftIndex++];
         }
       
         while (rightIndex < rightArrayLength) { 
             await this.delay(this.state.speed)
             this.setState({bars: array});
+            this.setActive("bar" + currentIndex)
             array[currentIndex++] = rightArray[rightIndex++];
         }
 
@@ -169,8 +173,18 @@ export class SortingApp extends Component {
 
     /* QUICKSORT */
     async quickSortStart(){
-        let { bars } = this.state
-        await this.quickSort(bars, 0, bars.length - 1);
+        if (!this.state.inProgess && !this.state.sorted){
+            let { bars } = this.state
+            this.setState({
+                sorted: false,
+                inProgess: true
+            })
+            await this.quickSort(bars, 0, bars.length - 1);
+            this.setState({
+                inProgess: false,
+                sorted: true
+            })
+        }
     }
     async quickSort(array, start, end){
         if (start < end){
@@ -186,6 +200,8 @@ export class SortingApp extends Component {
             await this.delay(this.state.speed)
             this.setState({bars: array});
             if (array[i] < val){
+                this.setActive("bar" + i)
+                this.setActive("bar" + index)
                 this.swap(array, i, index)
                 index++;
             }
@@ -196,7 +212,6 @@ export class SortingApp extends Component {
    
 
     /* COMPONENT RENDERING */
-
     render() {
         return (
             <div>
@@ -214,12 +229,11 @@ export class SortingApp extends Component {
                 <div className="content-container">
                     {
                         this.state.bars.map((val, index) => {
-                            return <div className="bar" style={{height: val + '%', width: 100 / (this.state.currentSize) + '%', margin: 100 / (10 * this.state.currentSize) + '%'}}  key={ index }></div>
+                            return <div id={ "bar" + index } className={ this.state.sorted ? "bar-finished" : "bar" } style={{height: val + '%', width: 100 / (this.state.currentSize) + '%', margin: 100 / (10 * this.state.currentSize) + '%'}}  key={ index }></div>
                         })
                     }   
                 </div>
             </div> 
- 
         )
     }
 }
