@@ -1,5 +1,5 @@
 import './App.css';
-import SortingApp from './components/SortingApp/SortingApp';
+import SortingApp from './components/SortingApp';
 
 function App() {
   

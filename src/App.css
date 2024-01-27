@@ -18,23 +18,26 @@ body {
   background: #ff5b5b;
 }
 .settings-container{
-  background: #FFF;
   display: flex;
-  align-items: center !important;
+  align-items: center;
   padding: 5px 10px;
+  gap: 10px;
 }
 .settings-form {
   display: flex;
 }
 .settings-slider {
   width: 150px !important;
-  margin: 3px 15px 0px 10px !important;
   color: #32cc93 !important;
+}
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 .settings-btn {
   font-family: 'Quicksand', sans-serif !important;
   font-weight: 700 !important;
-  margin: 0px 5px !important;
   background: #32cc93 !important;
   color: #303030 !important;
   border: none !important;
@@ -49,6 +52,40 @@ body {
 .settings-btn:focus {
   box-shadow: none !important;
 }
-.start-btn {
-  margin-right: 20px !important;
+.settings-popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 300px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  border:none;
+  outline: none;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  border-radius: 2px;
+  padding: 15px;
+  gap: 10px;
+}
+
+.menu-container {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.MuiSelect-select {
+  font-family: 'Quicksand', sans-serif !important;
+  font-weight: 600 !important;
+}
+.css-n70jm4-MuiInputBase-root-MuiInput-root-MuiSelect-root::before {
+  border-bottom: 1px solid #32cc93 !important;
+}
+.css-n70jm4-MuiInputBase-root-MuiInput-root-MuiSelect-root::after {
+  border-bottom: 2px solid #32cc93 !important;
+
 }
